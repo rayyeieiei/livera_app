@@ -1,0 +1,28 @@
+  name: livera_app
+  description: "A revolutionary bio-tech wellness application for LIVERA."
+  publish_to: 'none' 
+
+  version: 1.0.0+1
+
+  environment:
+    sdk: '>=3.0.0 <4.0.0' # Sesuaikan dengan versi Flutter lu
+
+  dependencies:
+    flutter:
+      sdk: flutter
+    cupertino_icons: ^1.0.6
+    # Tambahkan library lain di sini nanti
+
+  dev_dependencies:
+    flutter_test:
+      sdk: flutter
+    flutter_lints: ^3.0.0
+
+  flutter:
+    uses-material-design: true
+
+    # BAGIAN ASSETS (Sangat Sensitif Spasi)
+    assets:
+      - assets/images/logo.png
+      - assets/images/logohuruf.png
+      - assets/images/ # Atau cukup daftarkan foldernya saja
