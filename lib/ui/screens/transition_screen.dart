@@ -1,120 +1,116 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'dashboard_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TransitionOneScreen extends StatefulWidget {
-  const TransitionOneScreen({super.key});
+import 'login_qr_screen.dart';    
+import 'onboarding_wrapper.dart';
+import 'dashboard_screen.dart'; // Import Dashboard buat auto-login
 
-  @override
-  State<TransitionOneScreen> createState() => _TransitionOneScreenState();
+class TransitionScreen extends StatefulWidget {
+ const TransitionScreen({super.key});
+
+ @override
+ State<TransitionScreen> createState() => _TransitionScreenState();
 }
 
-class _TransitionOneScreenState extends State<TransitionOneScreen> {
-  int _step = 1;
+class _TransitionScreenState extends State<TransitionScreen> {
+ int _step = 0; 
 
-  @override
-  void initState() {
-    super.initState();
-    _runAnimation();
+ @override
+ void initState() {
+  super.initState();
+  _playAnimation();
+ }
+
+ Future<void> _playAnimation() async {
+  // Step 0: Initial (Loading internal)
+  await Future.delayed(const Duration(milliseconds: 600));
+  
+  // Step 1: Transisi ke Layar Sage Green (Identitas Livera)
+  if (mounted) setState(() => _step = 1);
+  await Future.delayed(const Duration(milliseconds: 1000));
+  
+  // Step 2: Balik ke Putih + Munculin Logo Daun
+  if (mounted) setState(() => _step = 2);
+  await Future.delayed(const Duration(milliseconds: 1200));
+  
+  // Step 3: Munculin Logo Full (Teks + Daun)
+  if (mounted) setState(() => _step = 3);
+    
+  final prefs = await SharedPreferences.getInstance();
+    
+    // Ambil flag onboarding dan serial alat
+  bool isDone = prefs.getBool('onboarding_done') ?? false;
+    String? savedSerial = prefs.getString('device_serial');
+
+    // Kasih napas buat user liat logo full
+  await Future.delayed(const Duration(seconds: 2));
+
+  if (mounted) {
+      Widget nextScreen;
+
+      if (!isDone) {
+        // Kalo baru pertama kali instal banget
+        nextScreen = const OnboardingWrapper();
+      } else if (savedSerial != null && savedSerial.isNotEmpty) {
+        nextScreen = DashboardScreen(serialNumber: savedSerial);
+      } else {
+        // Kalo udah onboarding tapi belum scan alat
+        nextScreen = const LoginQrScreen();
+      }
+
+   Navigator.pushReplacement(
+    context,
+    PageRouteBuilder(
+     transitionDuration: const Duration(milliseconds: 800),
+     pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(opacity: animation, child: child);
+     },
+    ),
+   );
   }
+ }
 
-  void _runAnimation() async {
-    await Future.delayed(const Duration(milliseconds: 500)); // Step 1: Putih
-    
-    setState(() => _step = 2); // Step 2: Hijau Sage
-    await Future.delayed(const Duration(milliseconds: 800));
+ @override
+ Widget build(BuildContext context) {
+    // Cek Dark Mode biar pas Splash Screen gak silau kalo user lagi mode gelap
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    setState(() => _step = 3); // Step 3: Logo Besar Nongol di Tengah
-    await Future.delayed(const Duration(milliseconds: 1000));
+  return Scaffold(
+   // Background adaptif pas Step 1 (Sage Green)
+   backgroundColor: _step == 1 
+          ? const Color(0xFF86A789) 
+          : (isDark ? const Color(0xFF121212) : Colors.white),
+   body: Center(
+    child: AnimatedSwitcher(
+     duration: const Duration(milliseconds: 600),
+     child: _buildContent(),
+    ),
+   ),
+  );
+ }
 
-    setState(() => _step = 4); // Step 4: Logo Mengecil & Geser ke Kanan
-    // Kita kasih delay dikit sebelum tulisan muncul biar gak barengan banget
-    await Future.delayed(const Duration(milliseconds: 400));
-    
-    setState(() => _step = 5); // Step 5: Tulisan "LIVERA" Fade In
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const DashboardScreen()),
-      );
-    }
+ Widget _buildContent() {
+  if (_step == 0 || _step == 1) {
+   return const SizedBox(key: ValueKey('empty'));
+  } 
+  
+  if (_step == 2) {
+   return Image.asset(
+    'assets/images/logo.webp', 
+    width: 120, // Ukuran disesuaiin biar pas di A54
+    key: const ValueKey('logo_only'),
+   );
+  } 
+  
+  if (_step == 3) {
+   return Image.asset(
+    'assets/images/logo_livera_full.webp', 
+    width: 220, 
+    key: const ValueKey('logo_full'),
+   );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    
-    // --- KALIBRASI POSISI (Biar Presisi di 375x827) ---
-    const double finalLogoSize = 60.0;
-    const double initialLogoSize = 180.0;
-    const double textWidth = 180.0;
-    const double spacing = 12.0;
-    const double totalGroupWidth = textWidth + spacing + finalLogoSize;
-
-    // Titik awal grup agar center horizontal
-    final double groupStartX = (size.width - totalGroupWidth) / 2;
-
-    // Posisi Logo
-    double logoW = _step <= 3 ? initialLogoSize : finalLogoSize;
-    double logoLeft = _step <= 3 
-        ? (size.width / 2 - initialLogoSize / 2) // Tengah banget di awal
-        : (groupStartX + textWidth + spacing);   // Di kanan teks saat akhir
-    
-    double logoTop = (size.height / 2 - logoW / 2);
-
-    // Posisi Tulisan
-    double textLeft = groupStartX;
-    double textTop = (size.height / 2 - 22); // Center vertical (adjust dikit biar sejajar logo)
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          // 1. BACKGROUND HIJAU (TRANSITION 2)
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 600),
-            width: size.width,
-            height: size.height,
-            color: _step == 2 ? const Color(0xFF82A881) : Colors.transparent,
-          ),
-
-          // 2. TULISAN "LIVERA" (Muncul belakangan di step 5)
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 600),
-            left: textLeft,
-            top: textTop,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 500),
-              opacity: _step >= 5 ? 1.0 : 0.0, // Muncul setelah logo geser
-              child: SizedBox(
-                width: textWidth,
-                child: Image.asset('assets/images/logohuruf.png', fit: BoxFit.contain),
-              ),
-            ),
-          ),
-
-          // 3. LOGO ALGA (Mengecil & Geser)
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 900),
-            curve: Curves.easeOutBack, // Efek kenyal pas geser biar pro
-            left: logoLeft,
-            top: logoTop,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 400),
-              opacity: _step >= 3 ? 1.0 : 0.0,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 900),
-                curve: Curves.easeOutBack,
-                width: logoW,
-                height: logoW,
-                child: Image.asset('assets/images/logo.png', fit: BoxFit.contain),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  
+  return const SizedBox();
+ }
 }
