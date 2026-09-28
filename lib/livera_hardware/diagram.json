@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "author": "AlgaeLife Team",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-v1", "id": "esp32", "top": -2.72, "left": -24, "attrs": {} },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot1",
+      "top": 200.3,
+      "left": -153.8,
+      "attrs": { "label": "CO2 Sensor" }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot2",
+      "top": 238.7,
+      "left": 201.4,
+      "attrs": { "label": "Temp Sensor" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -50,
+      "left": 200,
+      "attrs": { "color": "magenta", "label": "Grow Light" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": 44.4,
+      "left": 176.6,
+      "attrs": { "color": "blue", "label": "Fan Motor" }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": -195.2,
+      "left": -90.4,
+      "attrs": { "pins": "i2c" }
+    }
+  ],
+  "connections": [
+    [ "esp32:34", "pot1:SIG", "orange", [ "v0" ] ],
+    [ "esp32:35", "pot2:SIG", "orange", [ "v0" ] ],
+    [ "esp32:2", "led1:A", "magenta", [ "v0" ] ],
+    [ "esp32:4", "led2:A", "blue", [ "v0" ] ],
+    [ "esp32:GND.1", "led1:K", "black", [ "v0" ] ],
+    [ "esp32:GND.1", "led2:K", "black", [ "v0" ] ],
+    [ "esp32:GND.1", "pot1:GND", "black", [ "v0" ] ],
+    [ "esp32:GND.1", "pot2:GND", "black", [ "v0" ] ],
+    [ "esp32:3V3", "pot1:VCC", "red", [ "v0" ] ],
+    [ "esp32:3V3", "pot2:VCC", "red", [ "v0" ] ],
+    [ "lcd1:GND", "esp32:GND.2", "black", [ "h-19.2", "v153.6", "h67.2", "v96" ] ],
+    [ "lcd1:VCC", "esp32:3V3", "red", [ "h28.8", "v355.3", "h144", "v-48" ] ],
+    [ "lcd1:SDA", "esp32:D21", "green", [ "h-38.4", "v115.4", "h201.6", "v9.6", "h48", "v76.8" ] ],
+    [
+      "lcd1:SCL",
+      "esp32:D22",
+      "green",
+      [ "h-48", "v105.9", "h220.8", "v38.4", "h28.8", "v28.8" ]
+    ],
+    [ "led1:A", "esp32:D2", "green", [ "v27.2", "h-90.6", "v76.8" ] ],
+    [ "led1:C", "esp32:GND.1", "green", [ "v46.4", "h-99.8", "v76.8" ] ],
+    [ "led2:A", "esp32:D4", "green", [ "v19.2", "h-76.8" ] ],
+    [ "led2:C", "esp32:GND.1", "green", [ "v9.6", "h-86", "v48" ] ]
+  ],
+  "dependencies": {}
+}
