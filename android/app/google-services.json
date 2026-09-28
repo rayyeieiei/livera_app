@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "52476403026",
+    "firebase_url": "https://livera-6a8d7-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "livera-6a8d7",
+    "storage_bucket": "livera-6a8d7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52476403026:android:d23a5c02bb35af3d17ae8b",
+        "android_client_info": {
+          "package_name": "com.example.livera_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52476403026-l8aqavteuhjbd3fhimqqkhnhdmf0t6ff.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.livera_app",
+            "certificate_hash": "6a182ecaf7da2c90d61162877901d5825efe73bb"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6mdKzjJgCrjZMtJkTFMuSJvjcAvip46k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52476403026-qftfnb9hjru6be8jf6c6fhgul559rbm8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

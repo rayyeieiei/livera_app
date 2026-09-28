@@ -1,28 +1,62 @@
-  name: livera_app
-  description: "A revolutionary bio-tech wellness application for LIVERA."
-  publish_to: 'none' 
+name: livera_app
+description: "A revolutionary bio-tech wellness application for LIVERA."
+publish_to: 'none'
 
-  version: 1.0.0+1
+version: 1.0.0+1
 
-  environment:
-    sdk: '>=3.0.0 <4.0.0' # Sesuaikan dengan versi Flutter lu
+environment:
+  sdk: '>=3.0.0 <4.0.0'
 
-  dependencies:
-    flutter:
-      sdk: flutter
-    cupertino_icons: ^1.0.6
-    # Tambahkan library lain di sini nanti
-
-  dev_dependencies:
-    flutter_test:
-      sdk: flutter
-    flutter_lints: ^3.0.0
-
+dependencies:
   flutter:
-    uses-material-design: true
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  shared_preferences: ^2.5.5
+  cupertino_icons: ^1.0.6
+  flutter_svg: ^2.0.10+1
+  mobile_scanner: ^3.0.0
+  url_launcher: ^6.3.0
+  provider: ^6.1.2
+  ionicons: ^0.2.2
+  screenshot: ^3.0.0
+  pdf: ^3.11.1
+  path_provider: ^2.1.3
+  printing: ^5.13.2
+  image_picker: ^1.2.1
+  easy_localization: ^3.0.7
+  firebase_core: ^3.1.1      
+  firebase_database: ^11.0.2
+  firebase_auth: ^5.7.0
+  firebase_storage: ^12.4.10
+  google_sign_in: ^7.2.0
+  http: ^1.1.0
+  flutter_local_notifications: ^17.0.0
+  qr_flutter: ^4.1.0
 
-    # BAGIAN ASSETS (Sangat Sensitif Spasi)
-    assets:
-      - assets/images/logo.png
-      - assets/images/logohuruf.png
-      - assets/images/ # Atau cukup daftarkan foldernya saja
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.4 
+
+flutter_launcher_icons:
+  android: "livera_gacor"
+  ios: true
+  image_path: "assets/icons/app_logo.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icons/app_logo.png"
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
+  generate: false
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/icons/flag_id.png
+    - assets/icons/flag_us.png
+    - assets/icons/ic_crown.svg
+    - assets/translations/
